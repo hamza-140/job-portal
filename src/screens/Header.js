@@ -34,7 +34,6 @@ const slideImages = [
   },
 ];
 const Header = () => {
-  const navigate = useNavigate();
   const [hoveredIcon, setHoveredIcon] = useState(null);
   return (
     <>
