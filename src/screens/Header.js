@@ -109,7 +109,7 @@ const Header = () => {
                 <h1 style={sliderContent}>
                   DISCOVER A NEW{" "}
                   <span style={{ color: "rgb(38, 59, 214)" }}>CAREER</span>{" "}
-                  DESIGNED FOR YOU!
+                  DESIGNED FOR YOU
                 </h1>
                 <p
                   style={{
