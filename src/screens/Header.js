@@ -3,6 +3,7 @@ import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import { SocialIcon } from "react-social-icons";
 import { Link } from "react-router-dom";
+import NavBar from "../components/Navbar";
 
 const divStyle = {
   display: "flex",
@@ -96,8 +97,8 @@ const Header = ({ isLoggedIn }) => {
             </span>{" "}
             Portal
           </div>
-          <div style={{ marginRight: "200px" }}>
-            {/* Your NavBar component */}
+          <div style={{ marginRight: "200px", marginTop: "5px" }}>
+            <NavBar></NavBar>
           </div>
         </div>
       </div>
