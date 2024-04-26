@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [userDetails, setUserDetails] = useState(null);
@@ -7,7 +7,7 @@ const Profile = () => {
 
   // Fetch user details from local storage on component mount
   useEffect(() => {
-    const loggedInUser = localStorage.getItem('loggedInUser');
+    const loggedInUser = localStorage.getItem("loggedInUser");
     if (loggedInUser) {
       setUserDetails(JSON.parse(loggedInUser));
     }
@@ -16,9 +16,10 @@ const Profile = () => {
   // Handle logout button click
   const handleLogout = () => {
     // Remove user details from local storage
-    localStorage.removeItem('loggedInUser');
+    localStorage.removeItem("loggedInUser");
+    localStorage.setItem("isLoggedIn", "false");
     // Navigate back to the home page
-    navigate('/');
+    navigate("/");
   };
 
   return (
