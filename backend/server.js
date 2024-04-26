@@ -50,12 +50,25 @@ async function getUserById(userId) {
 }
 
 // Define a function to add a new job to the database
+// Define a function to add a new job to the database
 async function addJob(job) {
   const database = client.db("JobPortal");
   const collection = database.collection("jobs");
-  const result = await collection.insertOne(job);
-  return result.insertedId;
+  
+  try {
+    // Assign current timestamp to createdAt if not provided
+    if (!job.createdAt) {
+      job.createdAt = new Date();
+    }
+    
+    const result = await collection.insertOne(job);
+    return result.insertedId;
+  } catch (error) {
+    console.error("Error adding job:", error);
+    throw error; // Re-throw the error to handle it in the calling function
+  }
 }
+
 
 // Define an Express route to handle job retrieval
 app.get("/jobs", async (req, res) => {
@@ -96,8 +109,10 @@ app.post("/login", async (req, res) => {
 // Define an Express route to handle adding a new job
 app.post("/jobs", async (req, res) => {
   const { title, description } = req.body;
+  const createdAt = new Date(); // Get current timestamp
+  
   try {
-    const jobId = await addJob({ title, description });
+    const jobId = await addJob({ title, description, createdAt }); // Pass createdAt to addJob function
     res.status(201).json({ message: "Job added successfully", jobId });
   } catch (error) {
     console.error("Error adding job:", error);
