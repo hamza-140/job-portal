@@ -12,7 +12,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("http://localhost:8800/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -27,7 +27,7 @@ const Login = () => {
       }
 
       // Fetch user details using userId
-      const userResponse = await fetch(`http://localhost:3000/user/${data.userId}`, {
+      const userResponse = await fetch(`http://localhost:8800/user/${data.userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

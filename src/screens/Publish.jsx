@@ -15,7 +15,7 @@ const Publish = () => {
     event.preventDefault();
     try {
       setIsLoading(true);
-      const response = await fetch('http://localhost:3000/Jobs', {
+      const response = await fetch('http://localhost:8800/Jobs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
