@@ -16,7 +16,7 @@ const NotFound = () => {
           </p>
           <a
           style={{textDecoration:'none'}}
-            href="#"
+            href="/"
             class="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded transition duration-150"
             title="Return Home"
           >
