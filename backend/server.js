@@ -1,0 +1,120 @@
+const express = require("express");
+const { MongoClient, ObjectId } = require("mongodb");
+const cors = require("cors");
+
+const app = express();
+const port = 3000;
+app.use(cors()); // Enable CORS for all routes
+app.use(express.json()); // Parse JSON-encoded bodies
+
+const uri =
+  "mongodb+srv://hamza-140:Hamza345@lama.hjk6a6p.mongodb.net/?retryWrites=true&w=majority";
+
+// Create a singleton instance of the MongoDB client
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// Connect to the MongoDB Atlas cluster
+async function connectToDatabase() {
+  try {
+    await client.connect();
+    console.log("Connected to MongoDB Atlas");
+  } catch (error) {
+    console.error("Error connecting to MongoDB Atlas:", error);
+    process.exit(1); // Exit the process if connection fails
+  }
+}
+
+// Define a function to retrieve jobs from the database
+async function getJobs() {
+  const database = client.db("JobPortal");
+  const collection = database.collection("jobs");
+  return collection.find({}).toArray();
+}
+
+// Define a function to retrieve a specific job by ID from the database
+async function getJobById(jobId) {
+  const database = client.db("JobPortal");
+  const collection = database.collection("jobs");
+  const objectId = new ObjectId(jobId);
+  return collection.findOne({ _id: objectId });
+}
+
+// Define a function to add a new job to the database
+async function addJob(job) {
+  const database = client.db("JobPortal");
+  const collection = database.collection("jobs");
+  const result = await collection.insertOne(job);
+  return result.insertedId;
+}
+
+// Define an Express route to handle job retrieval
+app.get("/jobs", async (req, res) => {
+  try {
+    const jobs = await getJobs();
+    res.json(jobs);
+  } catch (error) {
+    console.error("Error retrieving jobs:", error);
+    res.status(500).json({ error: "Error retrieving jobs" });
+  }
+});
+
+// Define an Express route to handle adding a new job
+app.post("/jobs", async (req, res) => {
+  const { title, description } = req.body;
+  try {
+    const jobId = await addJob({ title, description });
+    res.status(201).json({ message: "Job added successfully", jobId });
+  } catch (error) {
+    console.error("Error adding job:", error);
+    res.status(500).json({ error: "Error adding job" });
+  }
+});
+
+// Define an Express route to handle retrieval of a specific job by ID
+app.get("/jobs/:id", async (req, res) => {
+  const jobId = req.params.id;
+  try {
+    const job = await getJobById(jobId);
+    if (!job) {
+      return res.status(404).json({ error: "Job not found" });
+    }
+    res.json(job);
+  } catch (error) {
+    console.error("Error retrieving job:", error);
+    res.status(500).json({ error: "Error retrieving job" });
+  }
+});
+
+// Define an Express route to handle adding a new user
+// Define an Express route to handle adding a new user
+app.post("/users", async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    // Log the request body
+    console.log("Request Body:", req.body);
+
+    // Save user details to the database
+    const database = client.db("JobPortal");
+    const collection = database.collection("users");
+    const result = await collection.insertOne({ name, email, password });
+
+    res
+      .status(201)
+      .json({ message: `User added successfully ${req.body}` , userId: result.insertedId });
+  } catch (error) {
+    console.error("Error adding user:", error);
+    res.status(500).json({ error: "Error adding user" });
+  }
+});
+
+
+// Connect to the database and start the Express server
+connectToDatabase().then(() => {
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+});

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Nav = styled.nav`
@@ -75,9 +76,20 @@ const NavBar = () => {
           </a>
         </NavItem>
         <NavItem>
-          <a style={{ fontWeight: "500" }} href="/">
-            Job
-          </a>
+          <Link
+            to={`/Jobs`}
+            className="text-indigo-500 inline-flex items-center"
+          >
+            <a style={{ fontWeight: "500" }}>Jobs</a>
+          </Link>
+        </NavItem>
+        <NavItem>
+          <Link
+            to={`/Publish`}
+            className="text-indigo-500 inline-flex items-center"
+          >
+            <a style={{ fontWeight: "500" }}>Publish Job</a>
+          </Link>
         </NavItem>
         <NavItem>
           <a style={{ fontWeight: "500" }} href="/">

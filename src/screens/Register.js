@@ -1,27 +1,40 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../components/Navbar";
 
-const Login = () => {
+const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [cv, setCV] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const history = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (email && password) {
-      alert("Logged in successfully!");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch("http://localhost:3000/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add user");
+      }
+      setName("");
+      setEmail("");
+      setPassword("");
       setSubmitted(true);
-    } else {
-      alert("Please enter email and password");
+      localStorage.setItem("loggedInUser", JSON.stringify({ name, email }));
+      localStorage.setItem("isLoggedIn", "true");
+      history("/");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to add user");
     }
   };
-  const handleCVUpload = (e) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    setCV(file);
-  };
+
   const headerContainer = {
     display: "flex",
     justifyContent: "space-between",
@@ -88,40 +101,20 @@ const Login = () => {
   };
 
   return (
-    <div
-      style={{
-        overflow: "hidden",
-
-        backgroundColor: "rgb(38, 59, 214)",
-        height: "100vh",
-        width: "100%",
-      }}
-    >
+    <div style={{ overflow: "hidden", backgroundColor: "rgb(38, 59, 214)", height: "100vh", width: "100%" }}>
       <div style={header2}>
         <div style={headerContainer}>
-          <div
-            style={{
-              color: "black",
-              display: "flex",
-              alignItems: "center",
-              marginLeft: "200px",
-              fontWeight: "bold",
-              justifyContent: "center",
-            }}
-          >
-            <span style={{ color: "rgb(38, 59, 214)", fontSize: "25px" }}>
-              Job
-            </span>{" "}
-            Portal
+          <div style={{ color: "black", display: "flex", alignItems: "center", marginLeft: "200px", fontWeight: "bold", justifyContent: "center" }}>
+            <span style={{ color: "rgb(38, 59, 214)", fontSize: "25px" }}>Job</span> Portal
           </div>
           <div style={{ marginRight: "200px" }}>
-            <NavBar></NavBar>
+            <NavBar />
           </div>
         </div>
       </div>
       <div style={styles.loginContainer}>
         <form style={styles.loginForm} onSubmit={handleSubmit}>
-          <h2 style={styles.formTitle}>Login</h2>
+          <h2 style={styles.formTitle}>Register</h2>
           <div style={styles.formField}>
             <label style={styles.formLabel}>Name:</label>
             <input
@@ -151,39 +144,16 @@ const Login = () => {
               required
             />
           </div>
-          <div style={styles.formField}>
-            <label style={styles.formLabel}>Upload CV:</label>
-            <input
-              accept=".doc,.docx,.pdf"
-              type="file"
-              onChange={handleCVUpload}
-              style={{
-                ...styles.formInput,
-                padding: "10px",
-                width: "auto",
-                cursor: "pointer",
-              }}
-            />
-          </div>
-          <button
-            type="submit"
-            style={{
-              ...styles.formButton,
-              ...(submitted && styles.formButtonHover),
-            }}
-          >
-            {submitted ? "Logging in..." : "Login"}
+          <button type="submit" style={{ ...styles.formButton, ...(submitted && styles.formButtonHover) }}>
+            {submitted ? "Registering..." : "Register"}
           </button>
           {submitted && (
             <p style={{ textAlign: "center", marginTop: "20px" }}>
-              Welcome back!
+              Welcome! You are now registered.
             </p>
           )}
           <text style={{ textAlign: "center", marginTop: "20px" }}>
-            <a
-              style={{ textDecorationLine: "underline", color: "grey" }}
-              href="/Register"
-            >
+            <a style={{ textDecorationLine: "underline", color: "grey" }} href="/Login">
               Login Here!
             </a>
           </text>
@@ -193,4 +163,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import { SocialIcon } from "react-social-icons";
-import NavBar from "../components/Navbar";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const divStyle = {
   display: "flex",
@@ -33,7 +32,7 @@ const slideImages = [
     caption: "Slide 3",
   },
 ];
-const Header = () => {
+const Header = ({ isLoggedIn }) => {
   const [hoveredIcon, setHoveredIcon] = useState(null);
   return (
     <>
@@ -69,9 +68,15 @@ const Header = () => {
               </div>
             ))}
           </div>
-          <Link to="Login" style={{ textDecorationLine: "none" }}>
-            <div style={title}>Apply Now</div>
-          </Link>
+          {isLoggedIn ? (
+            <Link to="/profile" style={{ textDecorationLine: "none" }}>
+              <div style={title}>Profile</div>
+            </Link>
+          ) : (
+            <Link to="/login" style={{ textDecorationLine: "none" }}>
+              <div style={title}>Register / Login</div>
+            </Link>
+          )}
         </div>
       </div>
       <div style={header2}>
@@ -92,7 +97,7 @@ const Header = () => {
             Portal
           </div>
           <div style={{ marginRight: "200px" }}>
-            <NavBar></NavBar>
+            {/* Your NavBar component */}
           </div>
         </div>
       </div>
