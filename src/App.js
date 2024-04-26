@@ -7,6 +7,9 @@ import Jobs from "./screens/Jobs";
 import Job from "./screens/Job";
 import Publish from "./screens/Publish";
 import Profile from "./screens/Profile";
+import NotFound from "./screens/NotFound";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (
@@ -19,6 +22,7 @@ function App() {
         <Route path="/Publish" element={<Publish />} />
         <Route path="/Profile" element={<Profile />} />
         <Route path="/Jobs/:_id" element={<Job />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
