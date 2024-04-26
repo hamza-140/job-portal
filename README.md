@@ -33,7 +33,7 @@
 
 ## 🧐 About <a name = "about"></a>
 
-Job Portal is a full-stack web application developed to facilitate job searching and hiring processes. It provides a platform for job seekers to explore job listings, apply for positions, and manage their applications, while employers can post job openings and review candidate applications.
+Job Portal is a full-stack web application developed to facilitate job searching and hiring processes. It provides a platform for job seekers to explore job listings, apply for positions, and manage their applications, while employers can post job openings and review candidate's applications.
 
 ## 🎥 Demo / Working <a name = "demo"></a>
 
