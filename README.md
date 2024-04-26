@@ -1,70 +1,125 @@
-# Getting Started with Create React App
+<p align="center">
+  <a href="" rel="noopener">
+    <img width=200px height=200px src="https://i.imgur.com/FxL5qM0.jpg" alt="Project logo"></a>
+</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h3 align="center">Job Portal</h3>
 
-## Available Scripts
+<div align="center">
 
-In the project directory, you can run:
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![Platform](https://img.shields.io/badge/platform-web-orange.svg)]()
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
-### `npm start`
+</div>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<p align="center">🌐 Job Portal is a web application designed to connect job seekers with employment opportunities and streamline the recruitment process.
+    <br> 
+</p>
 
-### `npm test`
+## 📝 Table of Contents
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [About](#about)
+- [Demo / Working](#demo)
+- [How it works](#working)
+- [Usage](#usage)
+- [Getting Started](#getting_started)
+- [Built Using](#built_using)
+- [Contributing](#contributing)
+- [Authors](#authors)
+- [License](#license)
 
-### `npm run build`
+## 🧐 About <a name = "about"></a>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Job Portal is a full-stack web application developed to facilitate job searching and hiring processes. It provides a platform for job seekers to explore job listings, apply for positions, and manage their applications, while employers can post job openings and review candidate applications.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🎥 Demo / Working <a name = "demo"></a>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+![Working](https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExeXowdzA1emUyYzBhNXZsYThteW01M2ZqcXlkcmttbWVuMXRzMnBkOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ViMXk6viLMLvS6c4F8/giphy.gif)
 
-### `npm run eject`
+## 💭 How it works <a name = "working"></a>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Job Portal allows users to browse job listings, search for specific jobs based on criteria such as location or job title, view detailed job descriptions, and apply for positions directly through the platform. Employers can create accounts, post job openings, and manage candidate applications.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🎈 Usage <a name = "usage"></a>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+<!-- Provide instructions on how to use the application -->
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🏁 Getting Started <a name = "getting_started"></a>
 
-## Learn More
+To get a local copy up and running follow these simple steps.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Prerequisites
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<!-- List any prerequisites required to run the application -->
 
-### Code Splitting
+### Installing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+To run the Job Portal Project locally, follow these steps:
 
-### Analyzing the Bundle Size
+1. Clone the repository to your local machine.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+   ```
+   git clone https://github.com/hamza-140/job-portal.git
+   ```
 
-### Making a Progressive Web App
+2. Navigate to the project directory.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+   ```
+   cd job-portal
+   ```
 
-### Advanced Configuration
+3. Install dependencies using npm.
+   ```
+   npm install
+   ```
+4. Navigate to the backend directory.
+    ```
+   cd backend
+    ```
+5. Install dependencies using npm.
+   ```
+   npm install
+   ```
+4. Start the backend server.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+   ```
+   node server.js
+   ```
+4. Change directory back and Start the development server.
 
-### Deployment
+   ```
+   cd ..
+   ```
+   ```
+   npm start
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+5. Open your web browser and visit http://localhost:3001 to view the application.
 
-### `npm run build` fails to minify
+## Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Once the application is running, users can perform the following actions:
+
+- Browse job listings: Users can view a list of available job postings.
+- Search for jobs: Users can search for jobs based on keywords, location, or other criteria.
+- View job details: Users can click on a job listing to view more details about the job, including the job description, requirements, and application instructions.
+- Apply for jobs: Users can apply for jobs directly through the application by submitting their resume and contact information.
+- Create a job listing (admin only): Admin users can create new job listings by providing job details and posting them to the job board.
+
+## 🚀 Built Using <a name = "built_using"></a>
+
+- [React](https://reactjs.org/) - Frontend JavaScript library
+- [Node.js](https://nodejs.org/) - JavaScript runtime environment
+- [Express](https://expressjs.com/) - Web application framework for Node.js
+- [MongoDB](https://www.mongodb.com/) - NoSQL database
+
+## ✍️ Authors <a name = "authors"></a>
+
+- [@hamza-140](https://github.com/hamza-140) - Development
+
+## 📝 License <a name = "license"></a>
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
