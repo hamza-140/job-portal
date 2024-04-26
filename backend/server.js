@@ -60,6 +60,31 @@ app.get("/jobs", async (req, res) => {
     res.status(500).json({ error: "Error retrieving jobs" });
   }
 });
+// Define an Express route to handle user login
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Check if the email and password match a user in the database
+    const database = client.db("JobPortal");
+    const collection = database.collection("users");
+    const user = await collection.findOne({ email, password });
+
+    if (!user) {
+      // If no user found, return error response
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    // If user found, set login status in local storage
+
+    // Return success response
+    res.status(200).json({ message: "Login successful", userId: user._id });
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.status(500).json({ error: "Error during login" });
+  }
+});
+
 
 // Define an Express route to handle adding a new job
 app.post("/jobs", async (req, res) => {

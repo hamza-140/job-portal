@@ -1,18 +1,39 @@
 import React, { useState } from "react";
-import NavBar from "../components/Navbar";
+import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation import
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation(); // Add useLocation hook
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email && password) {
-      alert("Logged in successfully!");
-      setSubmitted(true);
-    } else {
-      alert("Please enter email and password");
+    try {
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to login");
+      }
+
+      // If login successful, set login status in local storage
+      localStorage.setItem("isLoggedIn", "true");
+
+      const returnTo = location.state?.returnTo || "/";
+      navigate(returnTo);
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert(error.message);
     }
   };
 
@@ -85,7 +106,6 @@ const Login = () => {
     <div
       style={{
         overflow: "hidden",
-
         backgroundColor: "rgb(38, 59, 214)",
         height: "100vh",
         width: "100%",
@@ -108,9 +128,7 @@ const Login = () => {
             </span>{" "}
             Portal
           </div>
-          <div style={{ marginRight: "200px" }}>
-            <NavBar></NavBar>
-          </div>
+          
         </div>
       </div>
       <div style={styles.loginContainer}>
