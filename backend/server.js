@@ -42,6 +42,13 @@ async function getJobById(jobId) {
   return collection.findOne({ _id: objectId });
 }
 
+async function getUserById(userId) {
+  const database = client.db("JobPortal");
+  const collection = database.collection("users");
+  const objectId = new ObjectId(userId);
+  return collection.findOne({ _id: objectId });
+}
+
 // Define a function to add a new job to the database
 async function addJob(job) {
   const database = client.db("JobPortal");
@@ -112,6 +119,22 @@ app.get("/jobs/:id", async (req, res) => {
     res.status(500).json({ error: "Error retrieving job" });
   }
 });
+
+app.get("/user/:id", async (req, res) => {
+  
+    const userId = req.params.id;
+    try {
+      const user = await getUserById(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      res.json(user);
+    } catch (error) {
+      console.error("Error retrieving user:", error);
+      res.status(500).json({ error: "Error retrieving user" });
+    }
+});
+
 
 // Define an Express route to handle adding a new user
 // Define an Express route to handle adding a new user

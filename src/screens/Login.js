@@ -26,16 +26,32 @@ const Login = () => {
         throw new Error(data.error || "Failed to login");
       }
 
-      // If login successful, set login status in local storage
-      localStorage.setItem("isLoggedIn", "true");
+      // Fetch user details using userId
+      const userResponse = await fetch(`http://localhost:3000/user/${data.userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
+      const userData = await userResponse.json();
+
+      if (!userResponse.ok) {
+        throw new Error(userData.error || "Failed to fetch user details");
+      }
+
+      // Store user data in localStorage
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("loggedInUser", JSON.stringify(userData));
+
+      // Redirect user to home page or previous page
       const returnTo = location.state?.returnTo || "/";
       navigate(returnTo);
     } catch (error) {
       console.error("Error during login:", error);
       alert(error.message);
     }
-  };
+};
 
   const headerContainer = {
     display: "flex",
