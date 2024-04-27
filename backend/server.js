@@ -108,11 +108,11 @@ app.post("/login", async (req, res) => {
 
 // Define an Express route to handle adding a new job
 app.post("/jobs", async (req, res) => {
-  const { title, description } = req.body;
+  const { title, description,creator } = req.body;
   const createdAt = new Date(); // Get current timestamp
   
   try {
-    const jobId = await addJob({ title, description, createdAt }); // Pass createdAt to addJob function
+    const jobId = await addJob({ title, description, createdAt,creator }); // Pass createdAt to addJob function
     res.status(201).json({ message: "Job added successfully", jobId });
   } catch (error) {
     console.error("Error adding job:", error);

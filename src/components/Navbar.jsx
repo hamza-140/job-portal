@@ -77,20 +77,14 @@ const NavBar = () => {
           </a>
         </NavItem>
         <NavItem>
-          <Link
-            to={`/Jobs`}
-            className="text-indigo-500 inline-flex items-center"
-          >
-            <a style={{ fontWeight: "500" }}>Jobs</a>
-          </Link>
+          <a href="/jobs" style={{ fontWeight: "500" }}>
+            Jobs
+          </a>
         </NavItem>
         <NavItem>
-          <Link
-            to={`/Publish`}
-            className="text-indigo-500 inline-flex items-center"
-          >
-            <a style={{ fontWeight: "500" }}>Publish Job</a>
-          </Link>
+          <a href="/publish" style={{ fontWeight: "500" }}>
+            Publish Job
+          </a>
         </NavItem>
         <NavItem>
           <a style={{ fontWeight: "500" }} href="/">
@@ -103,7 +97,7 @@ const NavBar = () => {
           </a>
         </NavItem>
         <NavItem>
-        <Link
+          <Link
             to="contact"
             spy={true}
             smooth={true}

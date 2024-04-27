@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import thumbnail from "../assets/7753420.jpg";
+import creator from "../assets/creator.png";
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -114,7 +115,8 @@ const Jobs = () => {
                   <h1 className="w-56 h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></h1>
                   <p className="w-24 h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
                 </div>
-\              </div>
+                \{" "}
+              </div>
             </div>
           ) : (
             <div>
@@ -146,6 +148,27 @@ const Jobs = () => {
                             <p className="mt-4 text-base font-normal text-gray-500 leading-relax overflow-hidden h-20">
                               {job?.description || "NA"}
                             </p>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                              }}
+                            >
+                              <img
+                                src={creator}
+                                alt="thumbnail"
+                                style={{
+                                  width: "30px",
+                                  height: "30px",
+                                  borderRadius: "50%",
+                                }}
+                              />
+
+                              <p className="text-gray-400 text-sm mt-3">
+                                Posted By {job?.creator || "NA"}
+                              </p>
+                            </div>
                             <Link
                               to={`/Jobs/${job._id}`}
                               className="text-indigo-500 inline-flex items-center"
