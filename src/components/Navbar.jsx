@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-scroll";
 import styled from "styled-components";
 
 const Nav = styled.nav`
@@ -20,6 +20,7 @@ const NavItem = styled.li`
 
     &:hover {
       color: rgb(38, 59, 214);
+      cursor: pointer;
     }
   }
 `;
@@ -102,9 +103,16 @@ const NavBar = () => {
           </a>
         </NavItem>
         <NavItem>
-          <a style={{ fontWeight: "500" }} href="/">
-            Contact
-          </a>
+        <Link
+            to="contact"
+            spy={true}
+            smooth={true}
+            offset={-70}
+            duration={500}
+            className="text-indigo-500 inline-flex items-center"
+          >
+            <a style={{ fontWeight: "500" }}>Contact</a>
+          </Link>
         </NavItem>
       </DesktopNav>
       <MobileNav style={{ display: isMobileNavOpen ? "flex" : "none" }}>
@@ -124,9 +132,16 @@ const NavBar = () => {
           </a>
         </NavItem>
         <NavItem>
-          <a style={{ fontWeight: "500" }} href="/">
-            Contact
-          </a>
+          <Link
+            to="contact"
+            spy={true}
+            smooth={true}
+            offset={-70}
+            duration={500}
+            className="text-indigo-500 inline-flex items-center"
+          >
+            <a style={{ fontWeight: "500" }}>Contact</a>
+          </Link>
         </NavItem>
       </MobileNav>
     </Nav>

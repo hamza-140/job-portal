@@ -28,13 +28,11 @@ const Jobs = () => {
       console.error(error);
     }
   };
+
   const getTimeDifference = (createdAt) => {
     const currentTime = new Date();
     const postedTime = new Date(createdAt);
     const timeDifference = currentTime - postedTime;
-    // Calculate time difference in milliseconds
-
-    // Convert time difference to human-readable format
     const secondsDifference = Math.floor(timeDifference / 1000);
     const minutesDifference = Math.floor(secondsDifference / 60);
     const hoursDifference = Math.floor(minutesDifference / 60);
@@ -60,33 +58,33 @@ const Jobs = () => {
         <a
           href="/"
           style={{ textDecoration: "none" }}
-          class="text-gray-600 dark:text-gray-400 dark:hover:text-blue-500 hover:text-blue-500"
+          className="text-gray-600 dark:text-gray-400 dark:hover:text-blue-500 hover:text-blue-500"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="w-5 h-5"
+            className="w-5 h-5"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
             <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
           </svg>
         </a>
-        <span class="mx-5 text-gray-500 dark:text-gray-300 rtl:-scale-x-100">
+        <span className="mx-5 text-gray-500 dark:text-gray-300 rtl:-scale-x-100">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="w-5 h-5"
+            className="w-5 h-5"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
             <path
-              fill-rule="evenodd"
+              fillRule="evenodd"
               d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-              clip-rule="evenodd"
+              clipRule="evenodd"
             />
           </svg>
         </span>
         <a
-          class="text-blue-600 dark:text-blue-400 hover:text-blue-500 hover:underline"
+          className="text-blue-600 dark:text-blue-400 hover:text-blue-500 hover:underline"
           style={{ textDecoration: "none" }}
         >
           Jobs
@@ -95,8 +93,28 @@ const Jobs = () => {
       <section className="mt-5 text-gray-600 body-font">
         <div className="container px-5 mx-auto">
           {isLoading ? (
-            <div className="flex justify-center items-center h-screen">
-              {/* Loading Spinner */}
+            <div className="container px-6 py-10 mx-auto animate-pulse">
+              {/* Skeleton UI markup */}
+              <h1 className="w-48 h-2 mx-auto bg-gray-200 rounded-lg dark:bg-gray-700"></h1>
+              <p className="w-64 h-2 mx-auto mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
+              <p className="w-64 h-2 mx-auto mt-4 bg-gray-200 rounded-lg sm:w-80 dark:bg-gray-700"></p>
+              <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="w-full ">
+                  <div className="w-full h-64 bg-gray-300 rounded-lg md:h-72 dark:bg-gray-600"></div>
+                  <h1 className="w-56 h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></h1>
+                  <p className="w-24 h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
+                </div>
+                <div className="w-full ">
+                  <div className="w-full h-64 bg-gray-300 rounded-lg md:h-72 dark:bg-gray-600"></div>
+                  <h1 className="w-56 h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></h1>
+                  <p className="w-24 h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
+                </div>
+                <div className="w-full ">
+                  <div className="w-full h-64 bg-gray-300 rounded-lg md:h-72 dark:bg-gray-600"></div>
+                  <h1 className="w-56 h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></h1>
+                  <p className="w-24 h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
+                </div>
+\              </div>
             </div>
           ) : (
             <div>
@@ -113,7 +131,6 @@ const Jobs = () => {
                             src={thumbnail}
                             alt="blog"
                           />
-
                           <div className="px-6 py-8">
                             <p className="text-gray-400 text-sm mt-2">
                               Posted {getTimeDifference(job?.createdAt || "NA")}
@@ -129,7 +146,6 @@ const Jobs = () => {
                             <p className="mt-4 text-base font-normal text-gray-500 leading-relax overflow-hidden h-20">
                               {job?.description || "NA"}
                             </p>
-
                             <Link
                               to={`/Jobs/${job._id}`}
                               className="text-indigo-500 inline-flex items-center"
