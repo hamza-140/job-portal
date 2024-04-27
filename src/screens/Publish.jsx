@@ -1,26 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Publish = () => {
   // State variables to store form data
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [userDetails, setUserDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate()
   const handleReturn = () => {
     navigate(-1);
   };
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    if (loggedInUser) {
+      setUserDetails(JSON.parse(loggedInUser));
+    }
+  }, []);
   // Function to handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      const creator = userDetails.name
       setIsLoading(true);
       const response = await fetch('http://localhost:8800/Jobs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, description }),
+        body: JSON.stringify({ title, description,creator }),
       });
       if (!response.ok) {
         throw new Error('Failed to add job');
