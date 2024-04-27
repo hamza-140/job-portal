@@ -7,7 +7,8 @@ const Contact = () => {
   const mapSrc = `https://maps.google.com/maps?width=100%&height=600&hl=en&q=${location}&ie=UTF8&t=&z=14&iwloc=B&output=embed`;
 
   return (
-    <section className="text-gray-600 body-font relative">
+    <div className="">
+    <section id="contact" className="text-gray-600 body-font relative">
     <div className="absolute inset-0 bg-gray-300">
       <iframe
         width="100%"
@@ -47,6 +48,7 @@ const Contact = () => {
       </div>
     </div>
   </section>
+  </div>
   )
 }
 
