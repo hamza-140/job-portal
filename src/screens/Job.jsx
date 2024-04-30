@@ -27,12 +27,17 @@ const Job = () => {
 
   const handleApplyNow = () => {
     if (isLoggedIn()) {
+      navigate(`/jobs/${_id}/apply`)
       console.log("Apply Now clicked for job ID:", _id);
     } else {
       // Redirect to login page with return URL
       navigate("/login", { state: { returnTo: `/jobs/${_id}` } });
     }
   };
+
+  const applicants = ()=>{
+    navigate(`/jobs/${_id}/applications`)
+  }
 
   const handleReturn = () => {
     navigate(-1);
@@ -125,6 +130,12 @@ const Job = () => {
               className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded mr-2"
             >
               Apply Now
+            </button>
+            <button
+              onClick={applicants}
+              className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded mr-2"
+            >
+              See applicants
             </button>
             <button
               onClick={handleReturn}
