@@ -122,7 +122,7 @@ const Jobs = () => {
             <div>
               <div className="flex flex-wrap mx-auto md:flex-nowrap p-12">
                 {jobs.length === 0 ? (
-                  <div className="w-full text-center">No jobs available</div>
+                  <div className="w-full text-center">No jobs available.</div>
                 ) : (
                   jobs.map((job) => (
                     <div key={job._id}>
