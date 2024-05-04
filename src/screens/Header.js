@@ -5,13 +5,6 @@ import { SocialIcon } from "react-social-icons";
 import { Link } from "react-router-dom";
 import NavBar from "../components/Navbar";
 
-const divStyle = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundSize: "cover",
-  height: "965px",
-};
 const socialIcons = [
   { url: "https://facebook.com" },
   { url: "https://twitter.com" },
@@ -33,8 +26,10 @@ const slideImages = [
     caption: "Slide 3",
   },
 ];
+
 const Header = ({ isLoggedIn }) => {
   const [hoveredIcon, setHoveredIcon] = useState(null);
+
   return (
     <>
       <div style={header}>
@@ -44,7 +39,7 @@ const Header = ({ isLoggedIn }) => {
               <div
                 key={index}
                 style={{
-                  margin: "10px 10px 10px 0",
+                  margin: "10px",
                   lineHeight: "33px",
                   border:
                     hoveredIcon === index
@@ -87,7 +82,6 @@ const Header = ({ isLoggedIn }) => {
               color: "black",
               display: "flex",
               alignItems: "center",
-              marginLeft: "200px",
               fontWeight: "bold",
               justifyContent: "center",
             }}
@@ -97,18 +91,18 @@ const Header = ({ isLoggedIn }) => {
             </span>{" "}
             Portal
           </div>
-          <div style={{ marginRight: "200px", marginTop: "5px" }}>
-            <NavBar></NavBar>
+          <div>
+            <NavBar />
           </div>
         </div>
       </div>
       <Slide>
-        {slideImages.map((slideImages, index) => (
+        {slideImages.map((slide, index) => (
           <div key={index}>
             <div
               style={{
                 ...divStyle,
-                backgroundImage: `url(${slideImages.url})`,
+                backgroundImage: `url(${slide.url})`,
               }}
             >
               <div>
@@ -159,14 +153,25 @@ const Header = ({ isLoggedIn }) => {
 };
 
 export default Header;
+
+const divStyle = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  backgroundSize: "cover",
+  height: "965px",
+};
+
 const sliderContent = {
   color: "white",
   fontSize: "48px",
 };
+
 const headerContainer = {
   display: "flex",
   justifyContent: "space-between",
 };
+
 const title = {
   fontFamily: "Open Sans",
   background: "#263bd6",
@@ -178,26 +183,24 @@ const title = {
   fontWeight: "600",
   color: "#fff",
   width: "150px",
-  marginRight: "200px",
 };
+
 const socials = {
   fontFamily: "Open Sans",
   display: "flex",
-  height: "57px",
   alignItems: "center",
-  justifyContent: "center",
   fontSize: "14px",
   fontWeight: "600",
   color: "#fff",
-  width: "150px",
-  marginLeft: "200px",
+  width: "auto",
 };
 
 const header = {
   color: "white",
   backgroundColor: "#333",
 };
+
 const header2 = {
-  color: "white",
+  color: "black",
   backgroundColor: "white",
 };
