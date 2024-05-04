@@ -49,18 +49,38 @@ async function getUserById(userId) {
   return collection.findOne({ _id: objectId });
 }
 
-// Define a function to add a new job to the database
-// Define a function to add a new job to the database
+async function applyForJob(job_id, applicationData) {
+  const database = client.db("JobPortal");
+  const collection = database.collection("jobApplications");
+  const objectId = new ObjectId(job_id);
+
+  try {
+    // Assign current timestamp to createdAt if not provided
+    if (!applicationData.createdAt) {
+      applicationData.createdAt = new Date();
+    }
+
+    const result = await collection.insertOne({
+      job_id: objectId,
+      ...applicationData,
+    });
+    return result.insertedId;
+  } catch (error) {
+    console.error("Error applying for job:", error);
+    throw error; // Re-throw the error to handle it in the calling function
+  }
+}
+
 async function addJob(job) {
   const database = client.db("JobPortal");
   const collection = database.collection("jobs");
-  
+
   try {
     // Assign current timestamp to createdAt if not provided
     if (!job.createdAt) {
       job.createdAt = new Date();
     }
-    
+
     const result = await collection.insertOne(job);
     return result.insertedId;
   } catch (error) {
@@ -68,7 +88,6 @@ async function addJob(job) {
     throw error; // Re-throw the error to handle it in the calling function
   }
 }
-
 
 // Define an Express route to handle job retrieval
 app.get("/jobs", async (req, res) => {
@@ -105,14 +124,13 @@ app.post("/login", async (req, res) => {
   }
 });
 
-
 // Define an Express route to handle adding a new job
 app.post("/jobs", async (req, res) => {
-  const { title, description,creator } = req.body;
+  const { title, description, creator } = req.body;
   const createdAt = new Date(); // Get current timestamp
-  
+
   try {
-    const jobId = await addJob({ title, description, createdAt,creator }); // Pass createdAt to addJob function
+    const jobId = await addJob({ title, description, createdAt, creator }); // Pass createdAt to addJob function
     res.status(201).json({ message: "Job added successfully", jobId });
   } catch (error) {
     console.error("Error adding job:", error);
@@ -136,20 +154,18 @@ app.get("/jobs/:id", async (req, res) => {
 });
 
 app.get("/user/:id", async (req, res) => {
-  
-    const userId = req.params.id;
-    try {
-      const user = await getUserById(userId);
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
-      }
-      res.json(user);
-    } catch (error) {
-      console.error("Error retrieving user:", error);
-      res.status(500).json({ error: "Error retrieving user" });
+  const userId = req.params.id;
+  try {
+    const user = await getUserById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
+    res.json(user);
+  } catch (error) {
+    console.error("Error retrieving user:", error);
+    res.status(500).json({ error: "Error retrieving user" });
+  }
 });
-
 
 // Define an Express route to handle adding a new user
 // Define an Express route to handle adding a new user
@@ -167,15 +183,65 @@ app.post("/users", async (req, res) => {
 
     res
       .status(201)
-      .json({ message: `User added successfully ${req.body}` , userId: result.insertedId });
+      .json({
+        message: `User added successfully ${req.body}`,
+        userId: result.insertedId,
+      });
   } catch (error) {
     console.error("Error adding user:", error);
     res.status(500).json({ error: "Error adding user" });
   }
 });
 
+// Define a function to add a new job application to the database
 
-// Connect to the database and start the Express server
+// Define an Express route to handle job applications
+app.post("/jobs/:job_id/apply", async (req, res) => {
+  const { job_id } = req.params;
+
+  const { user_Id,name, email, phoneNumber } = req.body;
+  const user_id = new ObjectId(user_Id);
+
+  console.log(req.body)
+
+  try {
+    const applicationId = await applyForJob(job_id, {
+      user_id,
+      name,
+      email,
+      phoneNumber
+    });
+    res
+      .status(201)
+      .json({
+        message: "Job application submitted successfully",
+        applicationId,
+      });
+  } catch (error) {
+    console.error("Error submitting job application:", error);
+    res.status(500).json({ error: "Error submitting job application" });
+  }
+});
+
+// Define an Express route to retrieve job applications for a specific job
+app.get("/jobs/:job_id/applications", async (req, res) => {
+  const { job_id } = req.params;
+  const objectId = new ObjectId(job_id);
+
+  try {
+    const database = client.db("JobPortal");
+    const collection = database.collection("jobApplications");
+    const applications = await collection
+      .find({ job_id: objectId })
+      .toArray();
+    res.json(applications);
+  } catch (error) {
+    console.error("Error retrieving job applications:", error);
+    res.status(500).json({ error: "Error retrieving job applications" });
+  }
+});
+
+
 connectToDatabase().then(() => {
   app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

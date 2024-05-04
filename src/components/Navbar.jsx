@@ -88,11 +88,6 @@ const NavBar = () => {
         </NavItem>
         <NavItem>
           <a style={{ fontWeight: "500" }} href="/">
-            About
-          </a>
-        </NavItem>
-        <NavItem>
-          <a style={{ fontWeight: "500" }} href="/">
             Services
           </a>
         </NavItem>

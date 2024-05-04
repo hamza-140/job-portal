@@ -9,6 +9,8 @@ import Publish from "./screens/Publish";
 import Profile from "./screens/Profile";
 import NotFound from "./screens/NotFound";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ApplyJobForm from "./screens/ApplyJobForm";
+import JobApplications from "./screens/JobApplications";
 
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
         <Route path="/Publish" element={<Publish />} />
         <Route path="/Profile" element={<Profile />} />
         <Route path="/Jobs/:_id" element={<Job />} />
+        <Route path="/jobs/:job_id/apply/" element={<ApplyJobForm />} />
+        <Route path="/jobs/:job_id/applications/" element={<JobApplications />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
