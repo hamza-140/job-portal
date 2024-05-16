@@ -1,39 +1,77 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/Navbar";
+import axios from "axios";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState(null); // State to store the uploaded avatar
   const [submitted, setSubmitted] = useState(false);
   const history = useNavigate();
-
   const handleSubmit = async (event) => {
+    const formData = new FormData();
+    formData.append("avatar", avatar);
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
     event.preventDefault();
-    try {
-      const response = await fetch("http://localhost:8800/users", {
-        method: "POST",
+
+    axios
+      .post("http://localhost:8800/users", formData, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
-        body: JSON.stringify({ name, email, password }),
+      })
+      .then((response) => {
+        const userId = response.data.userId; // Assuming your backend sends the ID as userId
+        console.log(response.data);
+        setName("");
+        setAvatar(null);
+        setEmail("");
+        setPassword("");
+        setSubmitted(true);
+        localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify({ id: userId, name, email })
+        );
+        localStorage.setItem("isLoggedIn", "true");
+        history("/");
+        console.log("User created successfully");
+      })
+      .catch((error) => {
+        console.error("Error creating user:", error);
       });
-      if (!response.ok) {
-        throw new Error("Failed to add user");
-      }
-      setName("");
-      setEmail("");
-      setPassword("");
-      setSubmitted(true);
-      localStorage.setItem("loggedInUser", JSON.stringify({ name, email }));
-      localStorage.setItem("isLoggedIn", "true");
-      history("/");
-    } catch (error) {
-      console.error(error);
-      alert("Failed to add user");
-    }
   };
+  // const handleSubmit = async (event) => {
+  //   const formData = new FormData();
+  //   formData.append("avatar", avatar);
+  //   event.preventDefault();
+  //   try {
+  //     // console.log(name, email, password, avatar);
+  //     const response = await fetch("http://localhost:8800/users", formData, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ name, email, password }),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Failed to add user");
+  //     }
+  //     setName("");
+  //     setEmail("");
+  //     setPassword("");
+  //     setSubmitted(true);
+  //     localStorage.setItem("loggedInUser", JSON.stringify({ name, email }));
+  //     localStorage.setItem("isLoggedIn", "true");
+  //     history("/");
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert("Failed to add user");
+  //   }
+  // };
 
   const headerContainer = {
     display: "flex",
@@ -101,11 +139,30 @@ const Register = () => {
   };
 
   return (
-    <div style={{ overflow: "hidden", backgroundColor: "rgb(38, 59, 214)", height: "100vh", width: "100%" }}>
+    <div
+      style={{
+        overflow: "hidden",
+        backgroundColor: "rgb(38, 59, 214)",
+        height: "100vh",
+        width: "100%",
+      }}
+    >
       <div style={header2}>
         <div style={headerContainer}>
-          <div style={{ color: "black", display: "flex", alignItems: "center", marginLeft: "200px", fontWeight: "bold", justifyContent: "center" }}>
-            <span style={{ color: "rgb(38, 59, 214)", fontSize: "25px" }}>Job</span> Portal
+          <div
+            style={{
+              color: "black",
+              display: "flex",
+              alignItems: "center",
+              marginLeft: "200px",
+              fontWeight: "bold",
+              justifyContent: "center",
+            }}
+          >
+            <span style={{ color: "rgb(38, 59, 214)", fontSize: "25px" }}>
+              Job
+            </span>{" "}
+            Portal
           </div>
           <div style={{ marginRight: "200px" }}>
             <NavBar />
@@ -144,7 +201,23 @@ const Register = () => {
               required
             />
           </div>
-          <button type="submit" style={{ ...styles.formButton, ...(submitted && styles.formButtonHover) }}>
+          <div style={styles.formField}>
+            <label style={styles.formLabel}>Avatar:</label>
+            <input
+              type="file"
+              style={styles.formInput}
+              accept="image/*"
+              onChange={(e) => setAvatar(e.target.files[0])}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            style={{
+              ...styles.formButton,
+              ...(submitted && styles.formButtonHover),
+            }}
+          >
             {submitted ? "Registering..." : "Register"}
           </button>
           {submitted && (
@@ -153,7 +226,10 @@ const Register = () => {
             </p>
           )}
           <text style={{ textAlign: "center", marginTop: "20px" }}>
-            <a style={{ textDecorationLine: "underline", color: "grey" }} href="/Login">
+            <a
+              style={{ textDecorationLine: "underline", color: "grey" }}
+              href="/Login"
+            >
               Login Here!
             </a>
           </text>

@@ -126,7 +126,7 @@ const Jobs = () => {
                 ) : (
                   jobs.map((job) => (
                     <div key={job._id}>
-                      <div className="flex w-full mr-5">
+                      <div className="flex w-full mr-5 cursor-pointer">
                         <div className="relative flex flex-col items-start m-1 transition duration-300 ease-in-out transform bg-white shadow-2xl rounded-xl md:w-80 md:-ml-16 hover:translate-y-[-8px] hover:translate-x-[16px]">
                           <img
                             className="object-cover object-center w-full rounded-t-xl lg:h-48 md:h-36"

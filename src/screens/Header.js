@@ -4,6 +4,9 @@ import "react-slideshow-image/dist/styles.css";
 import { SocialIcon } from "react-social-icons";
 import { Link } from "react-router-dom";
 import NavBar from "../components/Navbar";
+import banner2 from "../../src/assets/banners-2.jpeg";
+import banner5 from "../../src/assets/banners-5.jpeg";
+import banner6 from "../../src/assets/banners-6.jpeg";
 
 const socialIcons = [
   { url: "https://facebook.com" },
@@ -14,15 +17,15 @@ const socialIcons = [
 
 const slideImages = [
   {
-    url: "https://react.codezion.com/themes/tm/oneline/assets/images/banners-2.jpeg",
+    url: banner2,
     caption: "Slide 1",
   },
   {
-    url: "https://react.codezion.com/themes/tm/oneline/assets/images/banners-6.jpeg",
+    url: banner6,
     caption: "Slide 2",
   },
   {
-    url: "https://react.codezion.com/themes/tm/oneline/assets/images/banners-5.jpeg",
+    url: banner5,
     caption: "Slide 3",
   },
 ];
@@ -102,6 +105,7 @@ const Header = ({ isLoggedIn }) => {
             <div
               style={{
                 ...divStyle,
+                height: "800px", // Adjusted height for responsiveness
                 backgroundImage: `url(${slide.url})`,
               }}
             >
@@ -159,7 +163,7 @@ const divStyle = {
   alignItems: "center",
   justifyContent: "center",
   backgroundSize: "cover",
-  height: "965px",
+  height: "800px",
 };
 
 const sliderContent = {

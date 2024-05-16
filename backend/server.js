@@ -1,11 +1,16 @@
 const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
 const cors = require("cors");
+const multer = require("multer"); // Import multer for file uploads
 
 const app = express();
 const port = 8800;
+
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); // Parse JSON-encoded bodies
+const storage = multer.memoryStorage();
+
+const upload = multer({ storage: storage });
 
 const uri =
   "mongodb+srv://hamza-140:Hamza345@lama.hjk6a6p.mongodb.net/?retryWrites=true&w=majority";
@@ -46,6 +51,12 @@ async function getUserById(userId) {
   const database = client.db("JobPortal");
   const collection = database.collection("users");
   const objectId = new ObjectId(userId);
+  return collection.findOne({ _id: objectId });
+}
+async function getAvatarById(avatarId) {
+  const database = client.db("JobPortal");
+  const collection = database.collection("users");
+  const objectId = new ObjectId(avatarId);
   return collection.findOne({ _id: objectId });
 }
 
@@ -169,24 +180,35 @@ app.get("/user/:id", async (req, res) => {
 
 // Define an Express route to handle adding a new user
 // Define an Express route to handle adding a new user
-app.post("/users", async (req, res) => {
+app.post("/users", upload.single("avatar"), async (req, res) => {
   try {
+    console.log("jo", req.body);
     const { name, email, password } = req.body;
 
+    let avatarPath = ""; // Initialize avatarPath
+
+    // Check if req.file exists and has a path
+    if (req.file && req.file.path) {
+      avatarPath = req.file.path; // Get the path of the uploaded avatar file
+    }
+
     // Log the request body
-    console.log("Request Body:", req.body);
+    console.log("Request Body:", req);
 
     // Save user details to the database
     const database = client.db("JobPortal");
     const collection = database.collection("users");
-    const result = await collection.insertOne({ name, email, password });
+    const result = await collection.insertOne({
+      name,
+      email,
+      password,
+      avatar: req.file.buffer, // Storing the image buffer directly, you might need to adjust depending on your requirements
+    });
 
-    res
-      .status(201)
-      .json({
-        message: `User added successfully ${req.body}`,
-        userId: result.insertedId,
-      });
+    res.status(201).json({
+      message: "User added successfully",
+      userId: result.insertedId,
+    });
   } catch (error) {
     console.error("Error adding user:", error);
     res.status(500).json({ error: "Error adding user" });
@@ -199,24 +221,22 @@ app.post("/users", async (req, res) => {
 app.post("/jobs/:job_id/apply", async (req, res) => {
   const { job_id } = req.params;
 
-  const { user_Id,name, email, phoneNumber } = req.body;
+  const { user_Id, name, email, phoneNumber } = req.body;
   const user_id = new ObjectId(user_Id);
 
-  console.log(req.body)
+  console.log(req.body);
 
   try {
     const applicationId = await applyForJob(job_id, {
       user_id,
       name,
       email,
-      phoneNumber
+      phoneNumber,
     });
-    res
-      .status(201)
-      .json({
-        message: "Job application submitted successfully",
-        applicationId,
-      });
+    res.status(201).json({
+      message: "Job application submitted successfully",
+      applicationId,
+    });
   } catch (error) {
     console.error("Error submitting job application:", error);
     res.status(500).json({ error: "Error submitting job application" });
@@ -231,16 +251,48 @@ app.get("/jobs/:job_id/applications", async (req, res) => {
   try {
     const database = client.db("JobPortal");
     const collection = database.collection("jobApplications");
-    const applications = await collection
-      .find({ job_id: objectId })
-      .toArray();
+    const applications = await collection.find({ job_id: objectId }).toArray();
     res.json(applications);
   } catch (error) {
     console.error("Error retrieving job applications:", error);
     res.status(500).json({ error: "Error retrieving job applications" });
   }
 });
+app.post("/api/upload", upload.single("avatar"), async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db("JobPortal");
+    const collection = database.collection("avatars");
 
+    const result = await collection.insertOne({
+      avatar: req.file.buffer, // Storing the image buffer directly, you might need to adjust depending on your requirements
+    });
+
+    res.status(201).send("Image uploaded successfully");
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+// Define an Express route to fetch the uploaded avatar
+app.get("/avatars/:id", async (req, res) => {
+  const avatarId = req.params.id;
+  try {
+    const avatar = await getAvatarById(avatarId);
+    if (!avatar) {
+      return res.status(404).json({ error: "Avatar not found" });
+    }
+
+    // Set the appropriate content type for the response
+    res.set("Content-Type", "image/*");
+
+    // Send the avatar data back to the frontend
+    res.send(avatar.avatar);
+  } catch (error) {
+    console.error("Error retrieving avatar:", error);
+    res.status(500).json({ error: "Error retrieving avatar" });
+  }
+});
 
 connectToDatabase().then(() => {
   app.listen(port, () => {

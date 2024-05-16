@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Mail, Phone } from "react-feather";
+import Avatar from "./Avatar";
 
 const Profile = () => {
   const [userDetails, setUserDetails] = useState(null);
@@ -12,6 +13,7 @@ const Profile = () => {
   useEffect(() => {
     const loggedInUser = localStorage.getItem("loggedInUser");
     if (loggedInUser) {
+      console.log(JSON.parse(loggedInUser));
       setUserDetails(JSON.parse(loggedInUser));
     }
   }, []);
@@ -74,10 +76,10 @@ const Profile = () => {
                     <div className="col-sm-4 user-profile blue-gradient d-flex align-items-center justify-content-center">
                       <div className="card-block text-center text-white">
                         <div className="m-b-25">
-                          <img
-                            src="https://img.icons8.com/bubbles/100/000000/user.png"
-                            className="img-radius"
-                            alt="User-Profile-Image"
+                          <Avatar
+                            avatarId={
+                              userDetails?.id || "6645eb4c1d994a8ed3519a80"
+                            }
                           />
                         </div>
                         <h2
