@@ -2,6 +2,7 @@ const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
 const cors = require("cors");
 const multer = require("multer"); // Import multer for file uploads
+const B2 = require("backblaze-b2");
 
 const app = express();
 const port = 8800;
@@ -20,6 +21,11 @@ const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+const b2 = new B2({
+  applicationKeyId: "b77b96080f6d",
+  applicationKey: "0029966d366124f2f6e0a9f354f186ff06c8fbff2b",
+});
+b2.authorize();
 
 // Connect to the MongoDB Atlas cluster
 async function connectToDatabase() {
@@ -180,40 +186,56 @@ app.get("/user/:id", async (req, res) => {
 
 // Define an Express route to handle adding a new user
 // Define an Express route to handle adding a new user
-app.post("/users", upload.single("avatar"), async (req, res) => {
-  try {
-    console.log("jo", req.body);
-    const { name, email, password } = req.body;
+app.post(
+  "/users",
+  upload.fields([
+    { name: "avatar", maxCount: 1 },
+    { name: "cv", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      // console.log("jo", req.body);
+      const { name, email, password } = req.body;
+      // console.log(req.file)
+      // Check if req.file exists and has a path
+      const cvFile = req.files["cv"][0];
+      const cvFileName = cvFile.originalname;
+      const cvFileBuffer = cvFile.buffer;
+      const bucketId = "3ba757bb09c6803880ff061d"; // ID of the bucket where you want to upload the file
 
-    let avatarPath = ""; // Initialize avatarPath
+      const b2CVResponse = await b2.uploadFile({
+        fileName: cvFileName,
+        data: cvFileBuffer,
+        bucketId,
+      });
+      // Log the request body
+      console.log("Request Body:", b2CVResponse.downloadLink);
 
-    // Check if req.file exists and has a path
-    if (req.file && req.file.path) {
-      avatarPath = req.file.path; // Get the path of the uploaded avatar file
+      // Save user details to the database
+      const database = client.db("JobPortal");
+      const collection = database.collection("users");
+      const result = await collection.insertOne({
+        name,
+        email,
+        password,
+        avatar: req.files["avatar"].buffer,
+        cv: {
+          fileName: cvFileName,
+          fileId: b2CVResponse.fileId,
+          downloadLink: b2CVResponse.downloadLink,
+        },
+      });
+
+      res.status(201).json({
+        message: "User added successfully",
+        userId: result.insertedId,
+      });
+    } catch (error) {
+      console.error("Error adding user:", error);
+      res.status(500).json({ error: "Error adding user" });
     }
-
-    // Log the request body
-    console.log("Request Body:", req);
-
-    // Save user details to the database
-    const database = client.db("JobPortal");
-    const collection = database.collection("users");
-    const result = await collection.insertOne({
-      name,
-      email,
-      password,
-      avatar: req.file.buffer, // Storing the image buffer directly, you might need to adjust depending on your requirements
-    });
-
-    res.status(201).json({
-      message: "User added successfully",
-      userId: result.insertedId,
-    });
-  } catch (error) {
-    console.error("Error adding user:", error);
-    res.status(500).json({ error: "Error adding user" });
   }
-});
+);
 
 // Define a function to add a new job application to the database
 

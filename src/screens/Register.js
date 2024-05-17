@@ -8,70 +8,47 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null); // State to store the uploaded avatar
+  const [cv, setCV] = useState(null); // State to store the uploaded CV
   const [submitted, setSubmitted] = useState(false);
   const history = useNavigate();
-  const handleSubmit = async (event) => {
-    const formData = new FormData();
-    formData.append("avatar", avatar);
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("password", password);
-    event.preventDefault();
 
-    axios
-      .post("http://localhost:8800/users", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        const userId = response.data.userId; // Assuming your backend sends the ID as userId
-        console.log(response.data);
-        setName("");
-        setAvatar(null);
-        setEmail("");
-        setPassword("");
-        setSubmitted(true);
-        localStorage.setItem(
-          "loggedInUser",
-          JSON.stringify({ id: userId, name, email })
-        );
-        localStorage.setItem("isLoggedIn", "true");
-        history("/");
-        console.log("User created successfully");
-      })
-      .catch((error) => {
-        console.error("Error creating user:", error);
-      });
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("avatar", avatar);
+      formData.append("cv", cv); // Append the CV file to the form data
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("password", password);
+
+      const response = await axios.post(
+        "http://localhost:8800/users",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const userId = response.data.userId; // Assuming your backend sends the ID as userId
+      setName("");
+      setAvatar(null);
+      setEmail("");
+      setPassword("");
+      setSubmitted(true);
+      localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify({ id: userId, name, email })
+      );
+      localStorage.setItem("isLoggedIn", "true");
+      history("/");
+      console.log("User created successfully");
+    } catch (error) {
+      console.error("Error creating user:", error);
+    }
   };
-  // const handleSubmit = async (event) => {
-  //   const formData = new FormData();
-  //   formData.append("avatar", avatar);
-  //   event.preventDefault();
-  //   try {
-  //     // console.log(name, email, password, avatar);
-  //     const response = await fetch("http://localhost:8800/users", formData, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ name, email, password }),
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error("Failed to add user");
-  //     }
-  //     setName("");
-  //     setEmail("");
-  //     setPassword("");
-  //     setSubmitted(true);
-  //     localStorage.setItem("loggedInUser", JSON.stringify({ name, email }));
-  //     localStorage.setItem("isLoggedIn", "true");
-  //     history("/");
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert("Failed to add user");
-  //   }
-  // };
 
   const headerContainer = {
     display: "flex",
@@ -208,6 +185,16 @@ const Register = () => {
               style={styles.formInput}
               accept="image/*"
               onChange={(e) => setAvatar(e.target.files[0])}
+              required
+            />
+          </div>
+          <div style={styles.formField}>
+            <label style={styles.formLabel}>CV:</label>
+            <input
+              type="file"
+              style={styles.formInput}
+              accept=".pdf,.doc,.docx"
+              onChange={(e) => setCV(e.target.files[0])}
               required
             />
           </div>
